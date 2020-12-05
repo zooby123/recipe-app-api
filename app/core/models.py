@@ -52,7 +52,7 @@ class Tag(models.Model):
 
 class Information(models.Model):
     """Information to be used in a recipe"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=900)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
@@ -60,3 +60,20 @@ class Information(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Recipe(models.Model):  # change to restaurant and this block of code
+    """Recipe object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.CharField(max_length=255, blank=True)
+    information = models.ManyToManyField('Information')
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.title
