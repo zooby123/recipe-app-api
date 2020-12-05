@@ -104,3 +104,56 @@ class PrivateRecipeApiTests(TestCase):
 
         serializer = RecipeDetailSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_basic_recipe(self):
+        """Test creating recipe"""
+        payload = {
+            'title': 'Test recipe',
+            'time_minutes': 30,
+            'price': 10.00,
+        }
+        res = self.client.post(RECIPES_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipe = Recipe.objects.get(id=res.data['id'])
+        for key in payload.keys():
+            self.assertEqual(payload[key], getattr(recipe, key))
+
+    def test_create_recipe_with_tags(self):
+        """Test creating a recipe with tags"""
+        tag1 = sample_tag(user=self.user, name='Burger')
+        tag2 = sample_tag(user=self.user, name='Pizza')
+        payload = {
+            'title': 'Test recipe with two tags',
+            'tags': [tag1.id, tag2.id],
+            'time_minutes': 30,
+            'price': 10.00
+        }
+        res = self.client.post(RECIPES_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipe = Recipe.objects.get(id=res.data['id'])
+        tags = recipe.tags.all()
+        self.assertEqual(tags.count(), 2)
+        self.assertIn(tag1, tags)
+        self.assertIn(tag2, tags)
+
+    def test_create_recipe_with_information(self):
+        """Test creating recipe with information"""
+        information1 = sample_information(user=self.user, name='information 1')
+        information2 = sample_information(user=self.user, name='information 2')
+        payload = {
+            'title': 'Test recipe with information',
+            'information': [information1.id, information2.id],
+            'time_minutes': 45,
+            'price': 15.00
+        }
+
+        res = self.client.post(RECIPES_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipe = Recipe.objects.get(id=res.data['id'])
+        information = recipe.information.all()
+        self.assertEqual(information.count(), 2)
+        self.assertIn(information1, information)
+        self.assertIn(information2, information)
