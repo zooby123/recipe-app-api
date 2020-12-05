@@ -24,7 +24,8 @@ class TagViewSet(viewsets.GenericViewSet,
 
 
 class InformationViewSet(viewsets.GenericViewSet,
-                         mixins.ListModelMixin):
+                         mixins.ListModelMixin,
+                         mixins.CreateModelMixin):
     """Manage Information in the database"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -35,3 +36,7 @@ class InformationViewSet(viewsets.GenericViewSet,
         """Return objects for the current authenticated user only"""
         return self.queryset.filter(user=self.request.user).order_by('-name')
 # May need to revisit the "name" part above. Dont want to view/get by user
+
+    def perform_create(self, serializer):
+        """Create a new Information"""
+        serializer.save(user=self.request.user)
