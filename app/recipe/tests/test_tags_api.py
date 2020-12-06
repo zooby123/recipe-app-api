@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Tag
+from core.models import Tag, Recipe
 
 from recipe.serializers import TagSerializer
 
@@ -46,7 +46,7 @@ class PrivateTagsApiTests(TestCase):
         tags = Tag.objects.all().order_by('-name')
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data, serializer.data)  # issue is here
 
     def test_tags_limited_to_user(self):
         """Test that tags returned are for authenticated user"""

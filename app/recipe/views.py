@@ -17,7 +17,6 @@ class BaseRecipeAttrViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         """Return objects for the current authenticated user only"""
         return self.queryset.filter(user=self.request.user).order_by('-name')
-# May need to revisit the "name" part above. Dont want to view/get by user
 
     def perform_create(self, serializer):
         """Create a new object"""
@@ -43,9 +42,23 @@ class RecipeViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    def _params_to_ints(self, qs):
+        """Convert a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in qs.split(',')]
+
     def get_queryset(self):
-        """Retrieve the recipes for the authenticated user"""
-        return self.queryset.filter(user=self.request.user)
+        """Return objects for the current authenticated user only"""
+        tags = self.request.query_params.get('tags')
+        information = self.request.query_params.get('information')
+        queryset = self.queryset
+        if tags:
+            tag_ids = self._params_to_ints(tags)
+            queryset = queryset.filter(tags__id__in=tag_ids)
+        if information:
+            information_ids = self._params_to_ints(information)
+            queryset = queryset.filter(information__id__in=information_ids)
+
+        return queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
         """Return appropriate serializer class"""
