@@ -69,8 +69,8 @@ class ModelTests(TestCase):
         recipe = models.Recipe.objects.create(
             user=sample_user(),
             title='Benares',
-            time_minutes=5,  # change to location? i.e 'London'
-            price=5.00  # change to price rating i.e '£££'
+            location='london',
+            price='5.00'  # change to price rating i.e '£££'
         )
 
         self.assertEqual(str(recipe), recipe.title)

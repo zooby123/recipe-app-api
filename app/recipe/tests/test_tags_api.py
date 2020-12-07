@@ -87,7 +87,7 @@ class PrivateTagsApiTests(TestCase):
         tag2 = Tag.objects.create(user=self.user, name='Lunch')
         recipe = Recipe.objects.create(
             title='Coriander eggs on toast',
-            time_minutes=10,
+            location=10,
             price=5.00,
             user=self.user,
         )
@@ -106,14 +106,14 @@ class PrivateTagsApiTests(TestCase):
         Tag.objects.create(user=self.user, name='Lunch')
         recipe1 = Recipe.objects.create(
             title='Pancakes',
-            time_minutes=5,
+            location=5,
             price=3.00,
             user=self.user
         )
         recipe1.tags.add(tag)
         recipe2 = Recipe.objects.create(
             title='Porridge',
-            time_minutes=3,
+            location=3,
             price=2.00,
             user=self.user
         )

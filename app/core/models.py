@@ -80,8 +80,8 @@ class Recipe(models.Model):  # change to restaurant and this block of code
         on_delete=models.CASCADE
     )
     title = models.CharField(max_length=255)
-    time_minutes = models.IntegerField()
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    location = models.CharField(max_length=255)
+    price = models.CharField(max_length=10)
     link = models.CharField(max_length=255, blank=True)
     information = models.ManyToManyField('Information')
     tags = models.ManyToManyField('Tag')

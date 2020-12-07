@@ -40,8 +40,8 @@ def sample_recipe(user, **params):  # reformat this block
     """Create and return a sample recipe"""
     defaults = {
         'title': 'Sample recipe',
-        'time_minutes': 10,
-        'price': 5.00,
+        'location': '10',
+        'price': '5.00',
     }
     defaults.update(params)
 
@@ -117,8 +117,8 @@ class PrivateRecipeApiTests(TestCase):
         """Test creating recipe"""
         payload = {
             'title': 'Test recipe',
-            'time_minutes': 30,
-            'price': 10.00,
+            'location': '30',
+            'price': '10.00',
         }
         res = self.client.post(RECIPES_URL, payload)
 
@@ -134,8 +134,8 @@ class PrivateRecipeApiTests(TestCase):
         payload = {
             'title': 'Test recipe with two tags',
             'tags': [tag1.id, tag2.id],
-            'time_minutes': 30,
-            'price': 10.00
+            'location': '30',
+            'price': '10.00'
         }
         res = self.client.post(RECIPES_URL, payload)
 
@@ -153,8 +153,8 @@ class PrivateRecipeApiTests(TestCase):
         payload = {
             'title': 'Test recipe with information',
             'information': [information1.id, information2.id],
-            'time_minutes': 45,
-            'price': 15.00
+            'location': '45',
+            'price': '15.00'
         }
 
         res = self.client.post(RECIPES_URL, payload)
@@ -188,15 +188,15 @@ class PrivateRecipeApiTests(TestCase):
         recipe.tags.add(sample_tag(user=self.user))
         payload = {
             'title': 'Spaghetti carbonara',
-            'time_minutes': 25,
-            'price': 5.00
+            'location': '25',
+            'price': '5.00'
             }
         url = detail_url(recipe.id)
         self.client.put(url, payload)
 
         recipe.refresh_from_db()
         self.assertEqual(recipe.title, payload['title'])
-        self.assertEqual(recipe.time_minutes, payload['time_minutes'])
+        self.assertEqual(recipe.location, payload['location'])
         self.assertEqual(recipe.price, payload['price'])
         tags = recipe.tags.all()
         self.assertEqual(len(tags), 0)

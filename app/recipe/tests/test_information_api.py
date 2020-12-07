@@ -93,8 +93,8 @@ class PrivateInformationAPITests(TestCase):
         )
         recipe = Recipe.objects.create(
             title='Apple crumble',
-            time_minutes=5,
-            price=10.00,
+            location='5',
+            price='£££',
             user=self.user
         )
         recipe.information.add(information1)
@@ -112,15 +112,15 @@ class PrivateInformationAPITests(TestCase):
         Information.objects.create(user=self.user, name='Cheese')
         recipe1 = Recipe.objects.create(
             title='Eggs benedict',
-            time_minutes=30,
-            price=12.00,
+            location='Europe',
+            price='12.00',
             user=self.user
         )
         recipe1.information.add(information)
         recipe2 = Recipe.objects.create(
             title='Green eggs on toast',
-            time_minutes=20,
-            price=5.00,
+            location='Scotland',
+            price='5.00',
             user=self.user
         )
         recipe2.information.add(information)
